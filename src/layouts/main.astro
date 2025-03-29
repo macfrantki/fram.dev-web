@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import { getCollection } from 'astro:content';
+
+// Define props interface
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+	type?: string;
+	twitterCreator?: string;
+	content?: any;
+}
+
+const { 
+	title, 
+	description, 
+	image, 
+	type, 
+	twitterCreator,
+	content 
+} = Astro.props;
+
+import '../styles/global.css';
+// Component Imports
+import Head from "@/layouts/head.astro"
+import Navbar from '@/components/Navbar';
+import DarkMode from '@/layouts/elements/dark-mode.astro';
+import Footer from '@/components/Footer';
+
+// Fetch collections for Navbar
+const servicesCollection = await getCollection('services', ({ data }) => {
+  return data.featured == true;
+});
+
+// Sort services by order (lowest to highest)
+servicesCollection.sort((a, b) => a.data.order - b.data.order);
+
+const projectsCollection = await getCollection('projects');
+
+// Transform data for the React component
+const services = servicesCollection.map(service => ({
+	title: service.data.name,
+	href: `/services/${service.data.slug}`,
+	description: service.data.description,
+	featured: service.data.featured,
+	order: service.data.order
+}));
+
+const projects = projectsCollection.map(project => ({
+	title: project.data.name,
+	href: `/projects/${project.data.slug}`,
+	description: project.data.description
+}));
+---
+
+<DarkMode />
+
+<html lang="en">
+	<Head 
+		title={title}
+		description={description}
+		image={image}
+		type={type}
+		twitterCreator={twitterCreator}
+	/>
+	<body>
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+			<Navbar client:load services={services} projects={projects} />
+			<slot />
+			<Footer />
+		</div>
+	</body>
+</html>

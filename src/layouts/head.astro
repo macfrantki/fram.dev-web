@@ -1,0 +1,30 @@
+---
+import SEO from "@/layouts/seo.astro"
+
+interface Props {
+    title?: string;
+    description?: string;
+    image?: string;
+    type?: string;
+    twitterCreator?: string;
+}
+
+const props = Astro.props;
+---
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <SEO 
+        title={props.title}
+        description={props.description}
+        image={props.image}
+        type={props.type}
+        twitterCreator={props.twitterCreator}
+    />
+    <script defer type="text/partytown" data-domain="fram.dev" src="https://plausible.io/js/script.js"></script>
+
+</head>

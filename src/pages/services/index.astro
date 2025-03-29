@@ -1,0 +1,27 @@
+---
+import Layout from '../../layouts/main.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch services collection
+const services = await getCollection('services');
+---
+<Layout 
+  title="Services | FRAM.DEV"
+  description="Explore our full range of web development and software services. From custom websites to complex applications, we deliver solutions that drive business growth."
+>
+  <div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-6">Our Services</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {services.map(service => (
+        <a href={`/services/${service.data.slug}`} class="block group">
+          <div class="border rounded-lg p-6 hover:shadow-md transition-shadow">
+            <h2 class="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">{service.data.name}</h2>
+            <p class="text-gray-600 dark:text-gray-300">{service.data.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+

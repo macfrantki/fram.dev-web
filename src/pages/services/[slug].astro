@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/main.astro';
+
+export async function getStaticPaths() {
+  const serviceEntries = await getCollection('services');
+  return serviceEntries.map(entry => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout 
+  title={entry.data.name}
+  description={entry.data.description || `Learn more about ${entry.data.name} - a service by FRAM.DEV`}
+  type="article"
+>
+  <div class="container mx-auto py-8">
+    <div class="prose prose-lg mx-auto dark:prose-invert">
+      <Content />
+    </div>
+  </div>
+</Layout> 
